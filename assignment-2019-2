@@ -1,0 +1,126 @@
+import sys
+file = sys.argv[1]
+
+from collections import deque
+
+list = []
+
+f = open('word_morph.txt', "r")
+
+for line in f:
+    line = f.readline()
+    line = line.rstrip()
+    list.append(line)
+
+f.close()
+
+import jellyfish
+jellyfish.levenshtein_distance(u'jellyfish', u'smellyfish')
+2
+
+def SetRoot(BK, l):
+    BK[l] = []
+
+def GetRoot(BK):
+    b = list[0]
+    return [b, 0]
+
+def GetWord(n):
+    return n[0]
+
+def AddChild(p, k, w):
+    BK[p[0]].append([w, k])
+
+def GetChild(n, k):
+    for i in BK[n[0]]:
+        if i[1] == k:
+            return i
+    return None
+
+def GetChildren(n):
+    for i in BK[n[0]]:
+        return i
+
+def GetBranchLabel(n, c):
+    return jellyfish.levenshtein_distance(n, c)
+    2
+
+
+def BKTreeInsert(BK, word):
+
+    if len(BK) == 0:
+        SetRoot(BK, word)
+
+        node = GetRoot(BK)
+        while node != None:
+            node_word = GetWord(node)
+            distance = jellyfish.levenshtein_distance(word, node_word)
+            2
+            parent = node
+            node = GetChild(node, distance)
+            if node == None:
+                AddChild(parent, distance, word)
+
+
+def BKTreeSearch(BK, word, r):
+
+    results = {}
+    to_check = deque()
+    to_check.append(GetRoot(BK))
+
+    while len(to_check) > 0:
+        node = to_check.pop()
+        node_word = GetWord(node)
+        distance = jellyfish.levenshtein_distance(word, node_word)
+        2
+
+        if distance <= r:
+            results.add(distance, node_word)
+
+        l = distance - r
+        h = distance + r
+
+        children = GetChildren(node)
+        for child in children:
+            d = GetBranchLabel(node, child)
+            if l <= d and d <= h:
+                to_check.append(child)
+
+    print(results)
+
+BK = {}
+for i in list:
+    BKTreeInsert(BK, i)
+
+
+def dijkstra(g, s):
+
+    nodes = g.keys()
+    num_nodes = len(nodes)
+
+    neighbors = []
+    dist = []
+    pred = []
+    for i in list:
+        b = list[i]
+        neighbors[i] = BKTreeSearch(BK, b, 1)
+        dist.append(neighbors[i], (MAX_INT for v in neighbors))
+        pred.append(neighbors[i], (-1 for v in neighbors))
+
+    dist[s] = list[0]
+    pq = dist[:]
+    elements_in_queue = num_nodes
+
+    while elements_in_queue != 0:
+        u = pq.index(min(pq))
+        pq[u] = MAX_INT
+        elements_in_queue -= 1
+        for (v, 1) in g[u]:
+
+            if dist[u] != MAX_INT and dist[v] > dist[u] + 1:
+                dist[v] = dist[u] + 1
+                pred[v] = u
+                pq[v] = dist[v] + jellyfish.levenshtein_distance(word, target_word)
+                2
+
+    return (pred, dist)
